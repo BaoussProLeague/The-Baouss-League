@@ -1,0 +1,6 @@
+PORT=3001
+NODE_ENV=production
+ADMIN_PASSWORD=baoussproleague
+SUPABASE_URL=
+SUPABASE_KEY=
+FPL_API=https://fantasy.premierleague.com/api
