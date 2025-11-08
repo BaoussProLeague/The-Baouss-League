@@ -1,0 +1,37 @@
+{
+  "reviews": [
+    {
+      "gw": 1,
+      "title": "GW1 Review - Season Kickoff",
+      "date": "2025-08-16",
+      "content": {
+        "highlights": "The new season has finally begun with Liverpool leading the charge. Ekiteke leads the scoring charts with City and Haaland maximizing output.",
+        "standings": "Champagne Khusanova leads with strong start, followed by TheBaleEffect and harsh1327",
+        "chips": "No major chips used in GW1 as managers settle in",
+        "eliminations": "None - LMS starts from GW2"
+      }
+    },
+    {
+      "gw": 2,
+      "title": "GW2 Review - Arsenal Storm",
+      "date": "2025-08-25",
+      "content": {
+        "highlights": "Arsenal storm to the top after dominant 5-0 victory over Leeds. Tottenham defeats Man City 2-0. North London teams dominate.",
+        "standings": "FragileHappymeal takes lead with 132 points, followed by Darkness and TheBale Effect at 131 points",
+        "chips": "5 chips used - new highest scores recorded in Wildcards (59) and Free Hits (66)",
+        "eliminations": "LMS begins - 1 manager eliminated"
+      }
+    },
+    {
+      "gw": 3,
+      "title": "GW3 Review - Liverpool Resilience",
+      "date": "2025-09-01",
+      "content": {
+        "highlights": "Liverpool edges Arsenal out with fantastic freekick by Szoboszlai. North London teams face first defeats of the season.",
+        "standings": "FragileHappymeal maintains lead, Cunha Even Win Bro? climbs rankings",
+        "chips": "Multiple chips used - Wildcard Vision scores peak at 59 by Mortiferi",
+        "eliminations": "LMS eliminates lowest scorer - 19 points was the decisive low"
+      }
+    }
+  ]
+}
