@@ -1,7 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm install",
-  "framework": "nodejs",
+  "framework": "express",
   "outputDirectory": "public",
   "env": {
     "PORT": "3001",
