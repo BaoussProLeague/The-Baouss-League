@@ -12,7 +12,7 @@
     "api/proxy.js": {
       "memory": 1024,
       "maxDuration": 30,
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs"
     }
   },
   "rewrites": [
