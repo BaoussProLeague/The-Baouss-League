@@ -1,0 +1,22 @@
+{
+  "name": "baouss-pro-league-dashboard",
+  "version": "2.0.0",
+  "description": "Premium FPL Dashboard for Baouss Pro League",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'Build complete'",
+    "vercel-build": "echo 'Production ready'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "node-cache": "^5.1.2",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
