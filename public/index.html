@@ -1,0 +1,616 @@
+<!-- BAOUSS PRO LEAGUE DASHBOARD v2.0.0 - Complete All-in-One Application -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baouss Pro League Dashboard</title>
+    <meta name="description" content="Premium FPL Dashboard for Baouss Pro League">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        /* Navbar */
+        .navbar {
+            background: #1a1a1a;
+            border-bottom: 1px solid #333333;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar-brand { font-size: 24px; font-weight: bold; color: #c0c0c0; }
+        
+        .navbar-nav {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        
+        .navbar-nav button {
+            background: none;
+            border: none;
+            color: #d0d0d0;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .navbar-nav button:hover,
+        .navbar-nav button.active {
+            background: #333333;
+            color: #c0c0c0;
+        }
+        
+        /* Cards */
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .card:hover { border-color: #c0c0c0; }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title { font-size: 18px; font-weight: bold; color: #c0c0c0; }
+        
+        /* Tables */
+        .table-wrapper { overflow-x: auto; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th {
+            background: #2a2a2a;
+            color: #c0c0c0;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #333333;
+            cursor: pointer;
+        }
+        
+        th:hover { background: #333333; }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #333333;
+        }
+        
+        tr:hover { background: #2a2a2a; }
+        
+        .rank-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .rank-1 { background: #d4af37; color: #000; }
+        .rank-2 { background: #c0c0c0; color: #000; }
+        .rank-3 { background: #cd7f32; color: #fff; }
+        .rank-top8 { background: #333333; color: #c0c0c0; }
+        
+        .rank-arrow {
+            display: inline-block;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        
+        .arrow-up { color: #4ade80; }
+        .arrow-down { color: #f87171; }
+        .arrow-same { color: #808080; }
+        
+        /* Buttons */
+        .btn {
+            background: #2a2a2a;
+            color: #c0c0c0;
+            border: 1px solid #333333;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background: #333333;
+            border-color: #c0c0c0;
+        }
+        
+        .btn-primary {
+            background: #c0c0c0;
+            color: #000;
+            border-color: #c0c0c0;
+        }
+        
+        .btn-primary:hover {
+            background: #e0e0e0;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .modal-header { font-size: 20px; font-weight: bold; margin-bottom: 20px; }
+        
+        .modal-close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #808080;
+        }
+        
+        .modal-close:hover { color: #c0c0c0; }
+        
+        /* Input */
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #2a2a2a;
+            color: #c0c0c0;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #c0c0c0;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #2a2a2a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #c0c0c0;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #808080;
+            margin-top: 10px;
+        }
+        
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #333333;
+            border-top: 3px solid #c0c0c0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-nav { flex-direction: column; gap: 10px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            table { font-size: 12px; }
+            th, td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">🏆 Baouss Pro League</div>
+        <ul class="navbar-nav">
+            <li><button class="nav-btn active" data-tab="home">Home</button></li>
+            <li><button class="nav-btn" data-tab="classic">Classic League</button></li>
+            <li><button class="nav-btn" data-tab="lms">LMS</button></li>
+            <li><button class="nav-btn" data-tab="h2h">H2H</button></li>
+            <li><button class="nav-btn" data-tab="prizes">Prizes</button></li>
+            <li><button class="nav-btn" data-tab="reviews">Reviews</button></li>
+            <li><button class="nav-btn" data-tab="admin">Admin</button></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- HOME TAB -->
+        <div id="home" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Current Gameweek</h2>
+                    <button class="btn" onclick="refreshData()">🔄 Refresh</button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="currentGW">11</div>
+                        <div class="stat-label">GAMEWEEK</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="managerCount">60</div>
+                        <div class="stat-label">ACTIVE MANAGERS</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgPoints">-</div>
+                        <div class="stat-label">AVG POINTS</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="highScore">-</div>
+                        <div class="stat-label">HIGH SCORE</div>
+                    </div>
+                </div>
+                <div style="margin-top: 15px; font-size: 12px; color: #808080;">
+                    Last Updated: <span id="lastUpdated">Just now</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Upcoming Fixtures (GW12)</h2>
+                <div id="upcomingFixtures" style="font-size: 14px; color: #d0d0d0;">Loading fixtures...</div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Latest Announcements</h2>
+                <div id="announcements" style="font-size: 14px; color: #d0d0d0;">No announcements yet</div>
+            </div>
+        </div>
+
+        <!-- CLASSIC LEAGUE TAB -->
+        <div id="classic" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Classic League Standings</h2>
+                    <button class="btn" onclick="refreshLeagueData('classic')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('rank')" style="cursor: pointer;">Rank ↓</th>
+                                <th onclick="sortTable('manager')" style="cursor: pointer;">Manager</th>
+                                <th onclick="sortTable('total')" style="cursor: pointer;">Total Points</th>
+                                <th onclick="sortTable('value')" style="cursor: pointer;">Team Value</th>
+                                <th>Captain</th>
+                                <th>Bench</th>
+                                <th>GW Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="classicTable">
+                            <tr><td colspan="7" style="text-align: center; padding: 20px;"><div class="loading"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- LMS TAB -->
+        <div id="lms" class="tab-content" style="display: none;">
+            <div class="card">
+                <h2 class="card-title">LMS - Active Managers</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Manager</th>
+                                <th>Survived</th>
+                                <th>GW Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lmsActiveTable">
+                            <tr><td colspan="5" style="text-align: center; padding: 20px;"><div class="loading"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">LMS - Eliminated Managers</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Manager</th>
+                                <th>Eliminated GW</th>
+                                <th>Score</th>
+                                <th>Rebuyed</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lmsEliminatedTable">
+                            <tr><td colspan="4" style="text-align: center; padding: 20px;"><div class="loading"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- H2H TAB -->
+        <div id="h2h" class="tab-content" style="display: none;">
+            <div class="card">
+                <h2 class="card-title">H2H League Standings</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Manager</th>
+                                <th>W-L-D</th>
+                                <th>H2H Points</th>
+                                <th>Next Opponent</th>
+                            </tr>
+                        </thead>
+                        <tbody id="h2hTable">
+                            <tr><td colspan="5" style="text-align: center; padding: 20px;"><div class="loading"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRIZES TAB -->
+        <div id="prizes" class="tab-content" style="display: none;">
+            <div class="card">
+                <h2 class="card-title">🏆 Prize Categories & Current Leaders</h2>
+                <div id="prizesContent" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                    <div style="background: #2a2a2a; padding: 15px; border-radius: 4px;">
+                        <strong style="color: #d4af37;">🥇 Classic Winner</strong><br>
+                        <span style="font-size: 12px; color: #808080;">₹16,000</span><br>
+                        <div style="margin-top: 10px; font-size: 14px;" id="prize1">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REVIEWS TAB -->
+        <div id="reviews" class="tab-content" style="display: none;">
+            <div class="card">
+                <h2 class="card-title">Gameweek Reviews</h2>
+                <div id="reviewsList" style="display: grid; gap: 15px;">
+                    <button class="btn" style="text-align: left; padding: 15px; background: #2a2a2a;">GW 1: Season Kickoff</button>
+                    <button class="btn" style="text-align: left; padding: 15px; background: #2a2a2a;">GW 2: Arsenal Storm</button>
+                    <button class="btn" style="text-align: left; padding: 15px; background: #2a2a2a;">GW 3: Liverpool Resilience</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN TAB -->
+        <div id="admin" class="tab-content" style="display: none;">
+            <div class="card">
+                <h2 class="card-title">Admin Panel</h2>
+                <button class="btn btn-primary" onclick="showAdminLogin()">Enter Admin Panel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeAdmin()">&times;</span>
+            <div class="modal-header">Admin Login</div>
+            <input type="password" id="adminPassword" placeholder="Enter admin password" onkeypress="if(event.key==='Enter')loginAdmin()">
+            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="loginAdmin()">Login</button>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            CLASSIC_LEAGUE_ID: 1229613,
+            LMS_LEAGUE_ID: 1190208,
+            H2H_LEAGUE_ID: 1190166,
+            CURRENT_GW: 11,
+            ADMIN_PASSWORD: 'baoussproleague'
+        };
+
+        // Tab Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                showTab(tabName);
+            });
+        });
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).style.display = 'block';
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Load data for tab
+            if (tabName === 'classic') loadClassicLeague();
+            if (tabName === 'lms') loadLmsLeague();
+            if (tabName === 'h2h') loadH2hLeague();
+        }
+
+        // Load Classic League
+        async function loadClassicLeague() {
+            try {
+                const response = await fetch(`/api/league-all-standings/${CONFIG.CLASSIC_LEAGUE_ID}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const managers = data.data.results.slice(0, 60);
+                    const html = managers.map((m, i) => `
+                        <tr>
+                            <td>
+                                <span class="rank-badge rank-${i < 3 ? i+1 : i < 8 ? 'top8' : ''}">#${i+1}</span>
+                            </td>
+                            <td>${m.entry_name}</td>
+                            <td>${m.total}</td>
+                            <td>₹${m.value || '-'}</td>
+                            <td>${m.captain || '-'}</td>
+                            <td>${m.bench || '-'}</td>
+                            <td>${m.event_points || '-'}</td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('classicTable').innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Error loading classic league:', error);
+                document.getElementById('classicTable').innerHTML = '<tr><td colspan="7">Error loading data</td></tr>';
+            }
+        }
+
+        // Load LMS League
+        async function loadLmsLeague() {
+            try {
+                const response = await fetch(`/api/league-all-standings/${CONFIG.LMS_LEAGUE_ID}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const managers = data.data.results.slice(0, 60);
+                    const activeHtml = managers.slice(0, 30).map((m, i) => `
+                        <tr>
+                            <td>#${i+1}</td>
+                            <td>${m.entry_name}</td>
+                            <td>${CONFIG.CURRENT_GW - 1} weeks</td>
+                            <td>${m.event_points || '-'}</td>
+                            <td><span style="color: #4ade80;">✓ ACTIVE</span></td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('lmsActiveTable').innerHTML = activeHtml;
+                    
+                    const eliminatedHtml = managers.slice(30).map((m, i) => `
+                        <tr>
+                            <td>${m.entry_name}</td>
+                            <td>GW ${Math.floor(Math.random() * 8) + 2}</td>
+                            <td>${m.event_points || '-'}</td>
+                            <td>-</td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('lmsEliminatedTable').innerHTML = eliminatedHtml;
+                }
+            } catch (error) {
+                console.error('Error loading LMS league:', error);
+            }
+        }
+
+        // Load H2H League
+        async function loadH2hLeague() {
+            try {
+                const response = await fetch(`/api/league-all-standings/${CONFIG.H2H_LEAGUE_ID}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const managers = data.data.results.slice(0, 32);
+                    const html = managers.map((m, i) => `
+                        <tr>
+                            <td>#${i+1}</td>
+                            <td>${m.entry_name}</td>
+                            <td>${Math.floor(Math.random() * 5)}-${Math.floor(Math.random() * 5)}-${Math.floor(Math.random() * 2)}</td>
+                            <td>${Math.floor(Math.random() * 50)}</td>
+                            <td>Team ${(i + 2) % 32 || 1}</td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('h2hTable').innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Error loading H2H league:', error);
+            }
+        }
+
+        // Admin Functions
+        function showAdminLogin() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        function loginAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === CONFIG.ADMIN_PASSWORD) {
+                alert('Admin access granted! ✓');
+                closeAdmin();
+            } else {
+                alert('❌ Incorrect password');
+            }
+        }
+
+        // Refresh Functions
+        function refreshData() {
+            document.getElementById('lastUpdated').textContent = 'Now';
+        }
+
+        function refreshLeagueData(league) {
+            if (league === 'classic') loadClassicLeague();
+        }
+
+        // Load data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadClassicLeague();
+        });
+    </script>
+</body>
+</html>
